@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Simple URL shortener</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+  </head>
+
+  <body>
+
+    <div class="container">
+        <form>
+            <div class="form-group">
+              <label for="inputURL">URL</label>
+              <input type="text" name="longurl" class="form-control" id="inputURL" placeholder="Enter URL (eg. http://www.google.com)">
+              <label for="customInputURL">Custom Short URL</label>
+              <input type="text" name="customshorturl" class="form-control" id="customshorturl" placeholder="Enter custom short url (optional)">
+              <label for="inputURL">Short URL</label> <span style="color: red" id="errMsg"> </span>
+              <input type="text" name="shorturl" class="form-control" id="shorturl" >
+            </div>
+            <button id="generate" class="btn btn-primary">Submit</button>
+          </form>
+
+    </div> <!-- /container -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+    <script type="text/javascript">
+      $("#generate").on("click", (e) => {
+        e.preventDefault()
+        $.ajax({
+          method: "POST",
+          url: "/api/v1/shortener",
+          data: {
+            longurl: $("#inputURL").val(),
+            customshorturl: $("#customshorturl").val()
+          },
+          success: (res) => {
+            $("#shorturl").val(res.shorturl)
+            $("#errMsg").val("")
+          },
+        }).fail((e) => {
+          $("#errMsg").text(e.responseJSON.message)
+        })
+      })
+    </script>
+  </body>
+</html>
